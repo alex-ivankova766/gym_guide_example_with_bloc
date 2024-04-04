@@ -1,1 +1,2 @@
-# gym guide
+# GymGuide
+A test assignment for employment.
