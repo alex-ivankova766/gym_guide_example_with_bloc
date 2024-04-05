@@ -1,7 +1,7 @@
 enum DificultyLevel { empty, beginner, middle, professional }
 
 extension DificultyLevelExt on DificultyLevel {
-  String toJson() {
+  String? toJson() {
     switch (this) {
       case DificultyLevel.empty:
         return 'empty';
@@ -12,7 +12,22 @@ extension DificultyLevelExt on DificultyLevel {
       case DificultyLevel.professional:
         return 'professional';
       default:
-        throw Exception('Неизвестное значение перечисления: $this');
+        return null;
+    }
+  }
+
+  String? toDisplay() {
+    switch (this) {
+      case DificultyLevel.empty:
+        return 'Уровень не указан';
+      case DificultyLevel.beginner:
+        return 'Начинающий уровень';
+      case DificultyLevel.middle:
+        return 'Средний уровень';
+      case DificultyLevel.professional:
+        return 'Продвинутый уровень';
+      default:
+        return null;
     }
   }
 

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/sport_excercise.dart';
-import 'enums.dart';
+import '../../domain/entities/enums.dart';
 
 class SportExerciseModel {
   const SportExerciseModel({
@@ -38,7 +38,7 @@ return SportExerciseModel(
     );
     }catch (error) {
 debugPrint(jsonEncode(error));
-return SportExerciseModel.fromEntity(SportExercise.empty);
+return SportExerciseModel.fromEntity(SportExercise.empty());
     }
     
   }
@@ -68,7 +68,7 @@ return SportExerciseModel.fromEntity(SportExercise.empty);
   }
 
   SportExercise toEntity() {
-    return SportExercise(uuid: uuid,
+    return SportExercise(uuidFromDB: uuid,
       title: title,
       description: description,
       exersizeType: exersizeType,
