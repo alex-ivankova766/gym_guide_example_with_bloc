@@ -7,6 +7,7 @@ abstract class LocalExercisesDatasource {
   Future<List<SportExercise>> getExercises();
   Future<void> addExercise(SportExercise exercise);
   Future<void> editExercise(SportExercise exercise);
+  Future<void> deleteExercise(String uuid);
 }
 
 class LocalExercisesDatasourceImpl extends LocalExercisesDatasource {
@@ -25,5 +26,10 @@ class LocalExercisesDatasourceImpl extends LocalExercisesDatasource {
   @override
   Future<List<SportExercise>> getExercises() async {
     return [];
+  }
+  
+  @override
+  Future<void> deleteExercise(String uuid) async {
+    debugPrint(uuid);
   }
 }

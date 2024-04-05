@@ -1,7 +1,7 @@
 enum SportExersizeType { empty, cardio, strength, stretch }
 
 extension SportExersizeTypeExt on SportExersizeType {
-  String toJson() {
+  String? toJson() {
     switch (this) {
       case SportExersizeType.empty:
         return 'empty';
@@ -12,10 +12,24 @@ extension SportExersizeTypeExt on SportExersizeType {
       case SportExersizeType.stretch:
         return 'stretch';
       default:
-        throw Exception('Неизвестное значение перечисления: $this');
+        return null;
     }
   }
 
+  String? toDisplay() {
+    switch (this) {
+      case SportExersizeType.empty:
+        return 'Тип не указан';
+      case SportExersizeType.cardio:
+        return 'Кардио';
+      case SportExersizeType.strength:
+        return 'Силовые';
+      case SportExersizeType.stretch:
+        return 'Растяжка';
+      default:
+        return null;
+    }
+  }
 static SportExersizeType? fromJson(String jsonValue) {
   switch (jsonValue) {
     case 'empty':

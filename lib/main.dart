@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,20 +19,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-      providers: [RepositoryProvider(
+      providers: [RepositoryProvider<SportExercisesRepositoryImpl>(
           create: (ctx) => SportExercisesRepositoryImpl(
             LocalExercisesDatasourceImpl(),
-            MockExcersisesDatasourceImpl(),
+            MockExersisesDatasourceImpl(),
           ),
         )]
       ,
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
+          BlocProvider<ManageExerciseCubit>(
             create: (ctx) => ManageExerciseCubit(
                 addExercise: AddExercise(ctx.read<SportExercisesRepositoryImpl>()),
                 editExercise: EditExercise(ctx.read<SportExercisesRepositoryImpl>()),
-                getExercises: GetExercises(ctx.read<SportExercisesRepositoryImpl>())),
+                getExercises: GetExercises(ctx.read<SportExercisesRepositoryImpl>()),
+                deleteExercise: DeleteExercise(ctx.read<SportExercisesRepositoryImpl>())),
           ),],
         child: Builder(
           builder: (context) {
@@ -59,7 +62,8 @@ class MyHomePage extends StatelessWidget {
               create: (context) => ManageExerciseCubit(
                     addExercise: AddExercise(context.read<SportExercisesRepositoryImpl>()),
                 editExercise: EditExercise(context.read<SportExercisesRepositoryImpl>()),
-                getExercises: GetExercises(context.read<SportExercisesRepositoryImpl>())
+                getExercises: GetExercises(context.read<SportExercisesRepositoryImpl>()),
+                deleteExercise: DeleteExercise(context.read<SportExercisesRepositoryImpl>())
                   ),
               child: const SportsExercisesScreen());
   }

@@ -6,9 +6,9 @@ import '../datasources/local_exercises_datasource.dart';
 import '../datasources/mock_excercises_datasource.dart';
 
 class SportExercisesRepositoryImpl implements SportExercisesRepository {
-  SportExercisesRepositoryImpl(this.localExercisesDatasource, this.excercisesDatasource);
+  SportExercisesRepositoryImpl(this.localExercisesDatasource, this.exercisesDatasource);
   final LocalExercisesDatasource localExercisesDatasource;
-  final MockExcersisesDatasource excercisesDatasource;
+  final MockExersisesDatasource exercisesDatasource;
 
   @override
   Future<void> addExercise(SportExercise exercise) {
@@ -24,7 +24,7 @@ class SportExercisesRepositoryImpl implements SportExercisesRepository {
   Future<List<SportExercise>> getExercises() async {
     debugPrint('Getting the posts from datasource');
     if ((await localExercisesDatasource.getExercises()).isEmpty) {
-      List<SportExercise> exercises = await excercisesDatasource.getExcercises();
+      List<SportExercise> exercises = await exercisesDatasource.getExercises();
       for (final exercise in exercises) {
         localExercisesDatasource.addExercise(exercise);
       }
@@ -32,5 +32,10 @@ class SportExercisesRepositoryImpl implements SportExercisesRepository {
     } else {
       return localExercisesDatasource.getExercises();
     }
+  }
+  
+  @override
+  Future<void> deleteExercise(String uuid) async {
+    localExercisesDatasource.deleteExercise(uuid);
   }
 }
