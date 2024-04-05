@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'features/exercises/data/datasources/local_exercises_datasource.dart';
+import 'features/exercises/data/datasources/mock_excercises_datasource.dart';
+import 'features/exercises/data/repositories/sport_exercises_repository_impl.dart';
+import 'features/exercises/domain/usecases/usecases.dart';
+import 'features/exercises/presentation/bloc/manage_exercise_cubit.dart';
+import 'features/exercises/presentation/views/screens/sports_exercises_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,7 +16,25 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiRepositoryProvider(
+      providers: [RepositoryProvider(
+          create: (ctx) => SportExercisesRepositoryImpl(
+            LocalExercisesDatasourceImpl(),
+            MockExcersisesDatasourceImpl(),
+          ),
+        )]
+      ,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (ctx) => ManageExerciseCubit(
+                addExercise: AddExercise(ctx.read<SportExercisesRepositoryImpl>()),
+                editExercise: EditExercise(ctx.read<SportExercisesRepositoryImpl>()),
+                getExercises: GetExercises(ctx.read<SportExercisesRepositoryImpl>())),
+          ),],
+        child: Builder(
+          builder: (context) {
+            return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Gym Guide",
       theme: ThemeData(
@@ -16,6 +42,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(),
+    );
+          },
+        ),
+      ),
     );
   }
 }
@@ -25,18 +55,12 @@ class MyHomePage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Gym Guide"),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: 
-            Text(
-              'Development has begun',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-    ));
+    return BlocProvider(
+              create: (context) => ManageExerciseCubit(
+                    addExercise: AddExercise(context.read<SportExercisesRepositoryImpl>()),
+                editExercise: EditExercise(context.read<SportExercisesRepositoryImpl>()),
+                getExercises: GetExercises(context.read<SportExercisesRepositoryImpl>())
+                  ),
+              child: const SportsExercisesScreen());
   }
 }
