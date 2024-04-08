@@ -21,7 +21,6 @@ class ManageExerciseScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             context.router.push(const SportsExercisesRoute());
-            // context.goNamed('exercises');
           },
         ),
       ),
