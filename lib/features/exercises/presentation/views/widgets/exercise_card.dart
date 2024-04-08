@@ -132,6 +132,7 @@ class ExerciseCard extends StatelessWidget {
             ),
             const SizedBox(height: 10,),
             Row(children: [TYPE_ICONS[exercise.exersizeType] ?? const SizedBox(),
+            const SizedBox(width: 5,),
             Text(
                   exercise.exersizeType.toDisplay() ?? ResStrings.description,
                   style: const TextStyle(

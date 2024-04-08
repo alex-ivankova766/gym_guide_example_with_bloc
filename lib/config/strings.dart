@@ -43,6 +43,8 @@ class ResStrings {
   static const String from = 'От';
   ///'Сортировка по типу'
   static const String sortByType = 'Сортировка по типу';
-  ///'Сортировка по сложности'
+  ///'Сортировка по уровню'
   static const String sortByLevel = 'Сортировка по уровню';
+    ///'Не сортировать'
+  static const String sortNone = 'По дате добавления';
 }

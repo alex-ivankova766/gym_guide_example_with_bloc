@@ -138,6 +138,7 @@ class _EditExerciseFormState extends State<EditExerciseForm> {
                 onTap: () {
                   _durationController.clear();
                 },
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: ResStrings.durationMinutes,
                   labelStyle: labelFormStyle(context),
@@ -158,6 +159,7 @@ class _EditExerciseFormState extends State<EditExerciseForm> {
                       onTap: () {
                         _repetitionsFromController.clear();
                       },
+                      keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         labelText: 'От',
                       ),
@@ -190,6 +192,7 @@ class _EditExerciseFormState extends State<EditExerciseForm> {
                       decoration: const InputDecoration(
                         labelText: ResStrings.to,
                       ),
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return ResStrings.repetitionsNull;
@@ -215,6 +218,7 @@ class _EditExerciseFormState extends State<EditExerciseForm> {
               ElevatedButton(
                 onPressed: () {
                   if (!_formKey.currentState!.validate()) {
+                    print('!validate');
                     return;
                   }
                   final updatedExercise = SportExercise(
