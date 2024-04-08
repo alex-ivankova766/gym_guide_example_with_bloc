@@ -16,6 +16,7 @@ class ManageExerciseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(ResStrings.manageExercise),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

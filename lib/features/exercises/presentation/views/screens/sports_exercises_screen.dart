@@ -25,6 +25,8 @@ class _SportsExercisesScreenState extends State<SportsExercisesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(ResStrings.exercisesList),
+        centerTitle: true,
+        leading: null,
         actions: [
           PopupMenuButton<String>(
             itemBuilder: (BuildContext context) => [
@@ -34,7 +36,8 @@ class _SportsExercisesScreenState extends State<SportsExercisesScreen> {
                   title: const Text(ResStrings.sortByType),
                   onTap: () {
                     setState(() {
-                      sortByType = !sortByType;
+                      sortByType = true;
+                      sortByDifficulty = false;
                     });
                     Navigator.pop(context);
                   },
@@ -46,43 +49,64 @@ class _SportsExercisesScreenState extends State<SportsExercisesScreen> {
                   title: const Text(ResStrings.sortByLevel),
                   onTap: () {
                     setState(() {
-                      sortByDifficulty = !sortByDifficulty;
+                      sortByType = false;
+                      sortByDifficulty = true;
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                value: 'Sort by None',
+                child: ListTile(
+                  title: const Text(ResStrings.sortNone),
+                  onTap: () {
+                    setState(() {
+                      sortByType = false;
+                      sortByDifficulty = false;
                     });
                     Navigator.pop(context);
                   },
                 ),
               ),
             ],
-          ),
-        ],
-      ),
+          ),]),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         child: const Icon(Icons.plus_one),
         onPressed: () {
           SportExercise newExercise = SportExercise.empty();
-          context.read<ManageExerciseCubit>().addExercise(newExercise);
-          context.router.push(ManageExerciseRoute(uuid: newExercise.uuid));
+          context.read<ManageExerciseCubit>().addExercise(newExercise).then(
+              (_) => context.router
+                  .push(ManageExerciseRoute(uuid: newExercise.uuid)));
         },
       ),
       body: BlocBuilder<ManageExerciseCubit, ManageExercisesState>(
         builder: (context, state) {
           if (state is ExercisesLoading) {
-            return const Center(child: CircularProgressIndicator(color: Colors.black));
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.black));
           }
           if (state is ExercisesLoaded) {
-            List<SportExercise> sortedExercises = state.exercises;
+            List<SportExercise> sortedExercises = List.of(state.exercises);
             if (sortByType) {
-              sortedExercises.sort((a, b) => a.exersizeType.index.compareTo(b.exersizeType.index));
+              sortedExercises.sort((a, b) =>
+                  a.exersizeType.index.compareTo(b.exersizeType.index));
             }
             if (sortByDifficulty) {
-              sortedExercises.sort((a, b) => a.level.index.compareTo(b.level.index));
+              sortedExercises
+                  .sort((a, b) => a.level.index.compareTo(b.level.index));
+            } if (!sortByType && !sortByDifficulty) {
+              sortedExercises = state.exercises;
             }
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 10,),
-                  ...sortedExercises.map((e) => SizedBox(width: double.infinity, child: ExerciseCard(e))),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ...sortedExercises.map((e) =>
+                      SizedBox(width: double.infinity, child: ExerciseCard(e))),
                 ],
               ),
             );
