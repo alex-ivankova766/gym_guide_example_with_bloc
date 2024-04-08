@@ -1,4 +1,4 @@
-enum SportExersizeType { empty, cardio, strength, stretch }
+enum SportExersizeType { cardio, strength, stretch, empty }
 
 extension SportExersizeTypeExt on SportExersizeType {
   String? toJson() {

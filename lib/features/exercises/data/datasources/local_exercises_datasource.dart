@@ -1,5 +1,6 @@
-
-import 'package:flutter/material.dart';
+import 'package:gym_guide/shared/data/models/sport_exercise_model.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 import '../../../../shared/domain/entities/sport_excercise.dart';
 
@@ -11,25 +12,59 @@ abstract class LocalExercisesDatasource {
 }
 
 class LocalExercisesDatasourceImpl extends LocalExercisesDatasource {
+  final Future<Database> _database;
+
+  LocalExercisesDatasourceImpl() : _database = _initDatabase();
+
+  static Future<Database> _initDatabase() async {
+    return openDatabase(
+      join(await getDatabasesPath(), 'exercises_database.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, uuid TEXT, title TEXT, description TEXT, exersizeType TEXT, level TEXT, duration INTEGER, repetitions TEXT)',
+        );
+      },
+      version: 1,
+    );
+  }
 
   @override
   Future<void> addExercise(SportExercise exercise) async {
-    debugPrint(exercise.title);
+    final Database db = await _database;
+    await db.insert(
+      'exercises',
+      SportExerciseModel.fromEntity(exercise).toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
-  
+
   @override
-  Future<void> editExercise(SportExercise exercise) {
-    // TODO: implement editExercise
-    throw UnimplementedError();
+  Future<void> editExercise(SportExercise exercise) async {
+    final Database db = await _database;
+    await db.update(
+      'exercises',
+      SportExerciseModel.fromEntity(exercise).toJson(),
+      where: 'uuid = ?',
+      whereArgs: [exercise.uuid],
+    );
   }
-  
+
   @override
   Future<List<SportExercise>> getExercises() async {
-    return [];
+    final Database db = await _database;
+    final List<Map<String, dynamic>> maps = await db.query('exercises');
+    return List.generate(maps.length, (i) {
+      return SportExerciseModel.fromJson(maps[i]).toEntity();
+    });
   }
-  
+
   @override
   Future<void> deleteExercise(String uuid) async {
-    debugPrint(uuid);
+    final Database db = await _database;
+    await db.delete(
+      'exercises',
+      where: 'uuid = ?',
+      whereArgs: [uuid],
+    );
   }
 }

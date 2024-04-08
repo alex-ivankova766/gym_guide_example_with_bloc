@@ -1,5 +1,6 @@
 
 import 'package:equatable/equatable.dart';
+import 'package:gym_guide/config/strings.dart';
 import 'package:uuid/uuid.dart';
 
 import 'enums.dart';
@@ -21,9 +22,9 @@ class SportExercise extends Equatable {
   final SportExersizeType exersizeType;
   final DificultyLevel level;
   final Duration duration;
-  final List<int> repetitions;
+  final Repetitions repetitions;
 
-  static empty() => SportExercise(uuidFromDB: null, title: 'Без названия', description: '1', exersizeType: SportExersizeType.empty, level: DificultyLevel.empty, duration: Duration.zero, repetitions: [0, 0],);
+  static empty() => SportExercise(uuidFromDB: null, title: ResStrings.title, description: ResStrings.description, exersizeType: SportExersizeType.empty, level: DificultyLevel.empty, duration: Duration.zero, repetitions: Repetitions(from: 1, to: 1),);
 
   @override
   List<Object?> get props => [
@@ -35,4 +36,10 @@ class SportExercise extends Equatable {
         duration,
         repetitions,
       ];
+}
+
+class Repetitions {
+  Repetitions({required this.from, required this.to});
+  final int from;
+  final int to;
 }

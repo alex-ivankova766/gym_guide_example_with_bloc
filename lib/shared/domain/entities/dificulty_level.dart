@@ -1,4 +1,4 @@
-enum DificultyLevel { empty, beginner, middle, professional }
+enum DificultyLevel { beginner, middle, professional, empty }
 
 extension DificultyLevelExt on DificultyLevel {
   String? toJson() {
