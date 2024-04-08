@@ -1,8 +1,6 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gym_guide/features/exercises/domain/usecases/delete_exercise.dart';
 
 import '../../../../shared/domain/entities/sport_excercise.dart';
 import '../../../../shared/domain/usecases/usecases.dart';
@@ -26,43 +24,38 @@ class ManageExerciseCubit extends Cubit<ManageExercisesState> {
         _getExercises = getExercises,
         _deleteExercise = deleteExercise,
         super(ExercisesLoading()) {
-getAllExercises();
-        }
+    getAllExercises();
+  }
 
-  Future<void> getAllExercises() async{
-              List<SportExercise> exercises = await _getExercises(NoParams());
+  Future<void> getAllExercises() async {
+    List<SportExercise> exercises = await _getExercises(NoParams());
     emit(ExercisesLoaded(exercises: exercises));
   }
 
   Future<void> addExercise(SportExercise exercise) async {
     try {
       await _addExercise(AddExerciseParams(exercise: exercise));
-      debugPrint('addExercise');
-      debugPrint(state.runtimeType.toString());
       if (state is ExercisesLoaded) {
-        debugPrint('state is Loaded');
-emit(ExercisesLoaded(exercises: [...(state as ExercisesLoaded).exercises, exercise]));
+        emit(ExercisesLoaded(
+            exercises: [...(state as ExercisesLoaded).exercises, exercise]));
       }
-      
     } catch (error) {
       debugPrint('Failed to add exercise: $error');
     }
   }
-Future<void> deleteExercise(String uuid) async {
-    try {
 
+  Future<void> deleteExercise(String uuid) async {
+    try {
       await _deleteExercise(DeleteExerciseParams(uuid: uuid));
-      debugPrint('deleteExercise');
-      debugPrint(state.runtimeType.toString());
       if (state is ExercisesLoaded) {
-        List<SportExercise> exercisesAfterDelete = (state as ExercisesLoaded).exercises;
-        debugPrint(exercisesAfterDelete.length.toString());
-        exercisesAfterDelete.removeWhere((element) => element.uuid == uuid,);
-        debugPrint(exercisesAfterDelete.length.toString());
+        List<SportExercise> exercisesAfterDelete =
+            (state as ExercisesLoaded).exercises;
+        exercisesAfterDelete.removeWhere(
+          (element) => element.uuid == uuid,
+        );
         emit(ExercisesLoading());
-emit(ExercisesLoaded(exercises: exercisesAfterDelete));
+        emit(ExercisesLoaded(exercises: exercisesAfterDelete));
       }
-      
     } catch (error) {
       debugPrint('Failed to delete exercise: $error');
     }
@@ -71,12 +64,17 @@ emit(ExercisesLoaded(exercises: exercisesAfterDelete));
   Future<void> editExercise(SportExercise exercise) async {
     try {
       await _editExercise(EditExerciseParams(exercise: exercise));
-      // final updatedExercises = [...state];
-      // final index = updatedExercises.indexWhere((e) => e.uuid == exercise.uuid);
-      // if (index != -1) {
-      //   updatedExercises[index] = exercise;
-      //   emit(updatedExercises);
-      // }
+      if (state is ExercisesLoaded) {
+        List<SportExercise> exercisesAfterEdit =
+            (state as ExercisesLoaded).exercises;
+        int changingIndex =
+            exercisesAfterEdit.indexOf(exercisesAfterEdit.firstWhere(
+          (element) => element.uuid == exercise.uuid,
+        ));
+        exercisesAfterEdit[changingIndex] = exercise;
+        emit(ExercisesLoading());
+        emit(ExercisesLoaded(exercises: exercisesAfterEdit));
+      }
     } catch (error) {
       debugPrint('Failed to edit exercise: $error');
     }

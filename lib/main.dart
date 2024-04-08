@@ -3,12 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'config/app_router.dart';
+import 'config/app_theme.dart';
 import 'features/exercises/data/datasources/local_exercises_datasource.dart';
 import 'features/exercises/data/datasources/mock_excercises_datasource.dart';
 import 'features/exercises/data/repositories/sport_exercises_repository_impl.dart';
 import 'features/exercises/domain/usecases/usecases.dart';
 import 'features/exercises/presentation/bloc/manage_exercise_cubit.dart';
-import 'features/exercises/presentation/views/screens/sports_exercises_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,34 +38,16 @@ class MyApp extends StatelessWidget {
           ),],
         child: Builder(
           builder: (context) {
-            return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Gym Guide",
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
-    );
+            final appRouter = AppRouter();
+            return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              title: 'Gym Guide application',
+              theme: CustomTheme().theme(),
+                    routerConfig: appRouter.config(),
+            );
           },
         ),
       ),
     );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-  
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-              create: (context) => ManageExerciseCubit(
-                    addExercise: AddExercise(context.read<SportExercisesRepositoryImpl>()),
-                editExercise: EditExercise(context.read<SportExercisesRepositoryImpl>()),
-                getExercises: GetExercises(context.read<SportExercisesRepositoryImpl>()),
-                deleteExercise: DeleteExercise(context.read<SportExercisesRepositoryImpl>())
-                  ),
-              child: const SportsExercisesScreen());
   }
 }

@@ -26,21 +26,23 @@ class SportExerciseModel {
 
   factory SportExerciseModel.fromJson(Map<String, dynamic> exercise) {
     debugPrint(jsonEncode(exercise));
+
     try {
-return SportExerciseModel(
-      uuid: exercise['uuid'],
-      title: exercise['title'],
-      description: exercise['description'],
-      exersizeType: SportExersizeTypeExt.fromJson(exercise['exersizeType']) ?? SportExersizeType.empty,
-      level: DificultyLevelExt.fromJson(exercise['level']) ?? DificultyLevel.empty,
-      duration: Duration(minutes: exercise['duration']),
-      repetitions: List<int>.from(exercise['repetitions']),
-    );
-    }catch (error) {
-debugPrint(jsonEncode(error));
-return SportExerciseModel.fromEntity(SportExercise.empty());
+      return SportExerciseModel(
+          uuid: exercise['uuid'],
+          title: exercise['title'],
+          description: exercise['description'],
+          exersizeType:
+              SportExersizeTypeExt.fromJson(exercise['exersizeType']) ??
+                  SportExersizeType.empty,
+          level: DificultyLevelExt.fromJson(exercise['level']) ??
+              DificultyLevel.empty,
+          duration: Duration(minutes: exercise['duration'] ?? 0),
+          repetitions: exercise['repetitions']);
+    } catch (error) {
+      debugPrint('error in fromJson');
+      return SportExerciseModel.fromEntity(SportExercise.empty());
     }
-    
   }
 
   Map<String, dynamic> toJson() {
@@ -51,7 +53,7 @@ return SportExerciseModel.fromEntity(SportExercise.empty());
       'exersizeType': exersizeType.toJson(),
       'level': level.toJson(),
       'duration': duration.inMinutes,
-      'repetitions': jsonEncode(repetitions),
+      'repetitions': repetitions,
     };
   }
 
@@ -63,17 +65,23 @@ return SportExerciseModel.fromEntity(SportExercise.empty());
       exersizeType: exercise.exersizeType,
       level: exercise.level,
       duration: exercise.duration,
-      repetitions: exercise.repetitions,
+      repetitions: [exercise.repetitions.from, exercise.repetitions.to],
     );
   }
 
   SportExercise toEntity() {
-    return SportExercise(uuidFromDB: uuid,
+    debugPrint(repetitions[0].toString());
+    debugPrint(repetitions[1].toString());
+    return SportExercise(
+      uuidFromDB: uuid,
       title: title,
       description: description,
       exersizeType: exersizeType,
       level: level,
       duration: duration,
-      repetitions: repetitions,);
+      repetitions: Repetitions(
+          from: repetitions.isNotEmpty ? repetitions[0] : 1,
+          to: repetitions.length != 1 ? repetitions[1] : 1),
+    );
   }
 }

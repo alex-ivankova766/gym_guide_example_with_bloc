@@ -1,8 +1,8 @@
 List<Map<String, dynamic>> sportExercises = [
   {
       'uuid': 'dg4',
-      'title': 'First exercise',
-      'description': 'Do it do it do it',
+      'title': 'Первое упражнение',
+      'description': 'Встать с дивана',
       'exersizeType': 'stretch',
       'level': 'middle',
       'duration': 10,
@@ -10,8 +10,8 @@ List<Map<String, dynamic>> sportExercises = [
     },
     {
       'uuid': 'dgdfg4',
-      'title': 'Second exercise',
-      'description': 'Do it do it do it',
+      'title': 'Второе упражнение',
+      'description': 'Добежать до кухни',
       'exersizeType': 'cardio',
       'level': 'beginner',
       'duration': 15,
@@ -19,8 +19,8 @@ List<Map<String, dynamic>> sportExercises = [
     },
     {
       'uuid': 'dggweg4',
-      'title': 'Third exercise',
-      'description': 'Do it do it do it',
+      'title': 'Третье упражнение',
+      'description': 'Выйти в магазин',
       'exersizeType': 'strength',
       'level': 'professional',
       'duration': 20,
