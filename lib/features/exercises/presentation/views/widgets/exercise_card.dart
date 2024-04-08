@@ -28,6 +28,7 @@ class ExerciseCard extends StatelessWidget {
   const ExerciseCard(this.exercise, {super.key});
   final SportExercise exercise;
 
+  // Подтверждение удаления
   Future<bool?> _showConfirmationDialog(
       BuildContext context, String itemName, String uuid) {
     return showDialog<bool>(
